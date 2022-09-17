@@ -8,6 +8,8 @@ GRID_SIZE = 20 # Each drawing is 20px
 # height = 480 / 20 = 24
 
 class Snake
+  attr_writer :direction
+
   def initialize
     # @positions = coordinate positions [x, y] that the snake currently occupies
     @positions = [[2, 0], [2, 1], [2, 2], [2, 3]]
@@ -30,7 +32,13 @@ class Snake
 
     case @direction
     when 'down'
-      @positions.push([head[0], head[1]+1])
+      @positions.push([head[0], head[1]+1]) # increment Y
+    when 'up'
+      @positions.push([head[0], head[1]-1]) # decrement Y
+    when 'left'
+      @positions.push([head[0]-1, head[1]]) # decrement X
+    when 'right'
+      @positions.push([head[0]+1, head[1]]) # increment X
     end
   end
 
@@ -50,6 +58,14 @@ update do
   snake.move
 
   snake.draw
+end
+
+on :key_down do |event|
+  puts event.key # print which direction was pressed on keyboard
+
+  if ['up', 'down', 'left', 'right'].include?(event.key)
+    snake.direction = event.key
+  end  
 end
 
 show
